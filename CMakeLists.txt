@@ -21,6 +21,8 @@ message(STATUS "dlib_INCLUDE_DIRS = ${dlib_INCLUDE_DIRS}")
 find_package(Eigen3 REQUIRED)
 message(STATUS "Eigen3_INCLUDE_DIRS = ${Eigen3_INCLUDE_DIRS}")
 
+find_package(Eigen3 REQUIRED)
+
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   tf
@@ -46,7 +48,11 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES face_detection
   CATKIN_DEPENDS roscpp sensor_msgs std_msgs cv_bridge image_transport tf
+<<<<<<< HEAD
   #DEPENDS eigen
+=======
+  DEPENDS eigen
+>>>>>>> Stabilization!
 )
 
 ###########
@@ -61,8 +67,12 @@ include_directories(include
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
   ${dlib_INCLUDE_DIRS}
+<<<<<<< HEAD
   ${Eigen3_INCLUDE_DIRS}
   /usr/include/eigen3
+=======
+  ~/Eigen
+>>>>>>> Stabilization!
 )
 
 

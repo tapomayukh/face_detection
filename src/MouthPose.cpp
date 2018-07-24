@@ -26,6 +26,8 @@ using namespace dlib;
 using namespace std;
 using namespace sensor_msgs;
 
+
+
 #define FACE_DOWNSAMPLE_RATIO 2
 #define SKIP_FRAMES 1
 #define OPENCV_FACE_RENDER
@@ -135,8 +137,8 @@ std::vector<cv::Point3d> get3dRealModelPoints()
 // 2D landmark points from all landmarks
 std::vector<cv::Point2d> get2dImagePoints(full_object_detection &d)
 {
-
   imagePoints.clear();
+  std::vector<cv::Point2d> imagePoints;
   // Stomion Origin
   imagePoints.push_back( cv::Point2d( (d.part(62).x()+
   d.part(66).x())*0.5, (d.part(62).y()+d.part(66).y())*0.5 ) );             // Stommion
@@ -265,8 +267,6 @@ void method()
        double cam_cy = cameraMatrix.at<double>(1, 2);
 
        // Obtain depth values of chosen facial landmark points, these are the applicates in the real world frame
-
-
        for(int i=0;i<abscissae.size();i++)
        {
        WorldFrameApplicates.push_back(depth_mat.at<float>(abscissae[i], ordinates[i]));
@@ -306,7 +306,6 @@ void method()
        cv::cv2eigen(R, mat);
        Eigen::Quaterniond EigenQuat(mat);
        quats = EigenQuat;
-
 
        // fill up a Marker
        visualization_msgs::Marker new_marker;
@@ -451,7 +450,7 @@ int main(int argc, char **argv)
    image_transport::ImageTransport it(nh);
 
    std::string MarkerTopic = "/camera/color/image_raw";
-   deserialize("/home/herb/Workspace/ada_ws/src/face_detection/model/shape_predictor_68_face_landmarks.dat") >> predictor;
+   deserialize("/home/egordon/Workspace/ada_ws/src/face_detection/model/shape_predictor_68_face_landmarks.dat") >> predictor;
    ros::Subscriber sub_info = nh.subscribe("/camera/color/camera_info", 1, cameraInfo);
    ros::Subscriber sub_depth = nh.subscribe("/camera/aligned_depth_to_color/image_raw", 1, DepthCallBack );
    image_transport::Subscriber sub = it.subscribe("/camera/color/image_raw", 1, imageCallback, image_transport::TransportHints("compressed"));
