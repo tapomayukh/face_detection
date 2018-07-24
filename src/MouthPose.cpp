@@ -282,18 +282,12 @@ void method()
        }
 
        // store the abscissae, ordinates and applicates of the real world co-ordinates in the world frame
-
-<<<<<<< HEAD
        for(int k=0;k<abscissae.size();k++)
        RealWorld3D.push_back(cv::Point3d(WorldFrameAbscissae[k],WorldFrameOrdinates[k],WorldFrameApplicates[k]));
 
 
        modelPoints3D = get3dModelPoints();
        modelPoints3DReal=get3dRealModelPoints();
-=======
-       Eigen::Vector3d Translate;
-       Eigen::Quaterniond quats;
->>>>>>> Update MouthPose.cpp
 
        // calculate rotation and translation vector using solvePnP
 
