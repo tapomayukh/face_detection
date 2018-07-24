@@ -26,8 +26,6 @@ using namespace dlib;
 using namespace std;
 using namespace sensor_msgs;
 
-
-
 #define FACE_DOWNSAMPLE_RATIO 2
 #define SKIP_FRAMES 1
 #define OPENCV_FACE_RENDER
@@ -118,7 +116,6 @@ std::vector<cv::Point3d> get3dModelPoints()
   modelPoints.push_back(cv::Point3d(-115.0,77.5,69.0));  // Left side
 
   return modelPoints;
-
 }
 
 std::vector<cv::Point3d> get3dRealModelPoints()
@@ -154,7 +151,6 @@ std::vector<cv::Point2d> get2dImagePoints(full_object_detection &d)
   imagePoints.push_back( cv::Point2d( d.part(54).x(), d.part(54).y() ) );     // Left Lip Corner
   imagePoints.push_back( cv::Point2d( d.part(0).x(), d.part(0).y() ) );     // Right Side
   imagePoints.push_back( cv::Point2d( d.part(16).x(), d.part(16).y() ) );     // Left Side
-
 
   return imagePoints;
 
