@@ -302,6 +302,11 @@ void method()
        Eigen::Quaterniond EigenQuat(mat);
        quats = EigenQuat;
 
+      // throw away impossible poses
+       if (translationVector.at<double>(2) < 100) {
+         return;
+       }
+
        // fill up a Marker
        visualization_msgs::Marker new_marker;
 
