@@ -27,7 +27,7 @@ using namespace std;
 using namespace sensor_msgs;
 
 #define FACE_DOWNSAMPLE_RATIO 2
-#define SKIP_FRAMES 1
+#define SKIP_FRAMES 5
 #define OPENCV_FACE_RENDER
 
 // global declarations
@@ -281,7 +281,6 @@ void method()
        for(int k=0;k<abscissae.size();k++)
        RealWorld3D.push_back(cv::Point3d(WorldFrameAbscissae[k],WorldFrameOrdinates[k],WorldFrameApplicates[k]));
 
-
        modelPoints3D = get3dModelPoints();
        modelPoints3DReal=get3dRealModelPoints();
 
@@ -301,11 +300,11 @@ void method()
        cv::cv2eigen(R, mat);
        Eigen::Quaterniond EigenQuat(mat);
        quats = EigenQuat;
-
+      /*
       // throw away impossible poses
        if (translationVector.at<double>(2) < 100) {
          return;
-       }
+       } */
 
        // fill up a Marker
        visualization_msgs::Marker new_marker;
