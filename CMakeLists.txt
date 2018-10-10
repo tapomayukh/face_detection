@@ -58,7 +58,7 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include(../../../../dlib/dlib-19.6/dlib/cmake)
+#include(../../../dlib-19.4/dlib/cmake)
 #include(/usr/lib/cmake/eigen3)
 include_directories(include
   ${catkin_INCLUDE_DIRS}
@@ -93,7 +93,7 @@ add_executable(${PROJECT_NAME} src/MouthPose.cpp)
 target_link_libraries(${PROJECT_NAME}
     ${catkin_LIBRARIES}
     ${OpenCV_LIBRARIES}
-    dlib
+    ${dlib_LIBRARIES}
 )
 
 ## Rename C++ executable without prefix
