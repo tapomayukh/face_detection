@@ -5,6 +5,7 @@
 #include <dlib/image_processing.h>
 #include <dlib/gui_widgets.h>
 #include <ros/ros.h>
+#include <ros/package.h>
 #include <image_transport/image_transport.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <visualization_msgs/Marker.h>
@@ -314,7 +315,8 @@ int main(int argc, char **argv)
    image_transport::ImageTransport it(nh);
 
    std::string MarkerTopic = "/camera/color/image_raw";
-   deserialize("../../../src/face_detection/model/shape_predictor_68_face_landmarks.dat") >> predictor;
+   std::string path = ros::package::getPath("face_detection");
+   deserialize(path + "/model/shape_predictor_68_face_landmarks.dat") >> predictor;
    ros::Subscriber sub_info = nh.subscribe("/camera/color/camera_info", 1, cameraInfo);
    image_transport::Subscriber sub = it.subscribe("/camera/color/image_raw", 1, imageCallback);
    marker_array_pub = nh.advertise<visualization_msgs::MarkerArray>("face_pose", 1);
