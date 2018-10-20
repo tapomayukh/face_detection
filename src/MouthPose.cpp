@@ -305,8 +305,6 @@ void method() {
                    rotationVector, translationVector, cv::SOLVEPNP_ITERATIVE);
       cv::solvePnP(modelPoints3D, imagePoints, cameraMatrix, distCoeffs,
                    rotationVector1, translationVector1, cv::SOLVEPNP_ITERATIVE);
-      // cv::solvePnPRansac(modelPoints3D, imagePoints, cameraMatrix,
-      // distCoeffs, rotationVector, translationVector,flags=cv::SOLVEPNP_P3P);
 
       Eigen::Vector3d Translate;
       Eigen::Quaterniond quats;
@@ -341,9 +339,9 @@ void method() {
       new_marker.id = 78234;
       new_marker.header.stamp = ros::Time();
       new_marker.color.a = 1.0;
-      new_marker.color.r = 0.0;
-      new_marker.color.g = 1.0;
-      new_marker.color.b = 0.0;
+      new_marker.color.r = 0.5;
+      new_marker.color.g = 0.5;
+      new_marker.color.b = 0.5;
 
       // mouth status display
       mouthOpen = checkMouth(shape);
