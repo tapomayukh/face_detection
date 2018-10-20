@@ -32,7 +32,6 @@ using namespace sensor_msgs;
 #define OPENCV_FACE_RENDER
 
 // global declarations
-
 bool depthCallbackBool=false;
 bool imgCallbackBool=false;
 bool recieved=false;
@@ -99,7 +98,6 @@ return co_ordinates;
 std::vector<cv::Point3d> get3dModelPoints()
 {
   std::vector<cv::Point3d> modelPoints;
-
   // Stomion Origin
   // X direction points forward projecting out of the person's stomion
 
@@ -190,7 +188,6 @@ std::vector<cv::Point2d> get2dImagePoints1(full_object_detection &d)
 
 void method()
 {
-
     if((depthCallbackBool && imgCallbackBool))
     {
 
@@ -262,7 +259,6 @@ void method()
        double cam_fy = cameraMatrix.at<double>(1, 1);
        double cam_cx = cameraMatrix.at<double>(0, 2);
        double cam_cy = cameraMatrix.at<double>(1, 2);
-
        // Obtain depth values of chosen facial landmark points, these are the applicates in the real world frame
        for(int i=0;i<abscissae.size();i++)
        {
@@ -334,6 +330,10 @@ void method()
        new_marker.color.g = 1.0;
        new_marker.color.b = 0.0;
 
+       new_marker.pose.orientation.x = quats.vec()[0];
+       new_marker.pose.orientation.y = quats.vec()[1];
+       new_marker.pose.orientation.z = quats.vec()[2];
+       new_marker.pose.orientation.w = quats.w();
 
        // mouth status display
         mouthOpen = checkMouth(shape);
@@ -367,6 +367,10 @@ void method()
       // projected to image plane
        cv::line(im, imagePoints[0],StomionPoint2D[0] , cv::Scalar(255,0,0), 2);
 
+      // draw line between stomion points in image and 3D stomion points
+      // projected to image plane
+      cv::line(im,StomionPoint2D[0], imagePoints[0] , cv::Scalar(255,0,0), 2);
+      }
 
        std::vector<cv::Point2d> reprojectedPoints;
        cv::projectPoints(modelPoints3D, rotationVector1, translationVector1, cameraMatrix, distCoeffs, reprojectedPoints);
