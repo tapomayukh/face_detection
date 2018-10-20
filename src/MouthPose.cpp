@@ -331,11 +331,12 @@ void method() {
       new_marker.pose.orientation.z = quats.vec()[2];
       new_marker.pose.orientation.w = quats.w();
 
-      new_marker.scale.x = 0.1;
-      new_marker.scale.y = 0.05;
-      new_marker.scale.z = 0.05;
+      new_marker.scale.x = 1;
+      new_marker.scale.y = 1;
+      new_marker.scale.z = 1;
 
-      new_marker.type = visualization_msgs::Marker::CUBE;
+      new_marker.type = visualization_msgs::Marker::MESH_RESOURCE;
+      new_marker.mesh_resource = "package://pr_ordata/data/objects/tom.dae";
       new_marker.action = visualization_msgs::Marker::ADD;
       new_marker.id = 78234;
       new_marker.header.stamp = ros::Time();
@@ -343,11 +344,6 @@ void method() {
       new_marker.color.r = 0.0;
       new_marker.color.g = 1.0;
       new_marker.color.b = 0.0;
-
-      new_marker.pose.orientation.x = quats.vec()[0];
-      new_marker.pose.orientation.y = quats.vec()[1];
-      new_marker.pose.orientation.z = quats.vec()[2];
-      new_marker.pose.orientation.w = quats.w();
 
       // mouth status display
       mouthOpen = checkMouth(shape);
