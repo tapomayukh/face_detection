@@ -98,6 +98,7 @@ std::vector<cv::Point3d> get3dModelPoints() {
   std::vector<cv::Point3d> modelPoints;
   // Stomion Origin
   // X direction points forward projecting out of the person's stomion
+  // All units in mm
 
   modelPoints.push_back(cv::Point3d(0., 0., 0.));           // Stommion
   modelPoints.push_back(cv::Point3d(-30.0, -65.5, 70.0));   // Right Eye
@@ -120,10 +121,14 @@ std::vector<cv::Point3d> get3dRealModelPoints() {
 
   modelPoints.clear();
 
-  for (int i = 0; i < RealWorld3D.size(); i++)
-    modelPoints.push_back(cv::Point3d(dist(RealWorld3D[0], RealWorld3D[i]).x,
+  for (int i = 0; i < RealWorld3D.size(); i++) {
+    auto point = cv::Point3d(dist(RealWorld3D[0], RealWorld3D[i]).x,
                                       dist(RealWorld3D[0], RealWorld3D[i]).y,
-                                      dist(RealWorld3D[0], RealWorld3D[i]).z));
+                                      dist(RealWorld3D[0], RealWorld3D[i]).z);
+    modelPoints.push_back(point);
+    cout << point << endl;
+  }
+  cout << endl;
 
   return modelPoints;
 }
@@ -301,6 +306,9 @@ void method() {
 
       cv::Mat R;
 
+      #define THRESHOLD_MIN 0.01
+      #define THRESHOLD_MAX 5
+
       cv::solvePnP(modelPoints3DReal, imagePoints1, cameraMatrix, distCoeffs,
                    rotationVector, translationVector, cv::SOLVEPNP_ITERATIVE);
       cv::solvePnP(modelPoints3D, imagePoints, cameraMatrix, distCoeffs,
@@ -310,8 +318,16 @@ void method() {
       Eigen::Quaterniond quats;
 
       cv::Rodrigues(rotationVector1, R);
+
+      Eigen::AngleAxisd rollAngle(3.14159, Eigen::Vector3d::UnitZ());
+      Eigen::AngleAxisd yawAngle(0, Eigen::Vector3d::UnitY());
+      Eigen::AngleAxisd pitchAngle(0, Eigen::Vector3d::UnitX());
+      Eigen::Quaternion<double> q = rollAngle * yawAngle * pitchAngle;
+      Eigen::Matrix3d zRot = q.matrix();
+
       Eigen::Matrix3d mat;
       cv::cv2eigen(R, mat);
+      mat = zRot * mat;
       Eigen::Quaterniond EigenQuat(mat);
       quats = EigenQuat;
 
@@ -320,10 +336,19 @@ void method() {
 
       // Grab the position
 
-      new_marker.pose.position.x = (translationVector.at<double>(0));
-      new_marker.pose.position.y = (translationVector.at<double>(1));
-      new_marker.pose.position.z = (translationVector.at<double>(2));
+      if(cv::norm(translationVector) < THRESHOLD_MIN || cv::norm(translationVector) > THRESHOLD_MAX) {
+        // Outlier Rejection
+        cout << "Outlier Rejected!" << endl;
+        new_marker.pose.position.x = -(translationVector1.at<double>(0)) / 1000.0;
+        new_marker.pose.position.y = -(translationVector1.at<double>(1)) / 1000.0;
+        new_marker.pose.position.z = -(translationVector1.at<double>(2)) / 1000.0;
+      } else {
+        new_marker.pose.position.x = (translationVector.at<double>(0));
+        new_marker.pose.position.y = (translationVector.at<double>(1));
+        new_marker.pose.position.z = (translationVector.at<double>(2));
+      }
 
+      
       new_marker.pose.orientation.x = quats.vec()[0];
       new_marker.pose.orientation.y = quats.vec()[1];
       new_marker.pose.orientation.z = quats.vec()[2];
@@ -342,6 +367,7 @@ void method() {
       new_marker.color.r = 0.5;
       new_marker.color.g = 0.5;
       new_marker.color.b = 0.5;
+
 
       // mouth status display
       mouthOpen = checkMouth(shape);
